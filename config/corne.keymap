@@ -11,10 +11,10 @@
 #include <dt-bindings/zmk/pointing.h>
 
 #define BASE 0
-#define NUM  1
-#define SYM  2
-#define MSE  3
-#define COL  4
+#define COL  1
+#define NUM  2
+#define SYM  3
+#define MSE  4
 #define NAV  5
 
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1400
@@ -186,13 +186,23 @@
             // |  DEL |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BSPC |
             // | CTRL |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
             // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | ESC  |
-            //                    | GUI | NUM | ENT |   | SPC | SYM  | TAB |
+            //                    | MSE | NUM | ENT |   | SPC | SYM  | TAB |
 
             bindings = <
 &kp DEL    &kp Q                        &kp W                          &kp E                      &kp R                       &kp T        &kp Y      &kp U                        &kp I                        &kp O                            &kp P                                  &kp BSPC
 &kp LCTRL  &mode_tap_left LEFT_SHIFT A  &mode_tap_left LEFT_CONTROL S  &mode_tap_left LEFT_GUI D  &mode_tap_left RIGHT_ALT F  &kp G        &kp H      &mode_tap_right RIGHT_ALT J  &mode_tap_right RIGHT_GUI K  &mode_tap_right RIGHT_CONTROL L  &mode_tap_right RIGHT_SHIFT SEMICOLON  &kp SQT
 &kp LSHFT  &kp Z                        &kp X                          &kp C                      &kp V                       &kp B        &kp N      &kp M                        &kp COMMA                    &kp DOT                          &kp FSLH                               &kp RIGHT_SHIFT
-                                                                       &kp ESCAPE                 &mo NUM                     &kp ENTER    &kp SPACE  &mo SYM                      &kp TAB
+                                                                       &lt MSE ESCAPE             &mo NUM                     &kp ENTER    &kp SPACE  &mo SYM                      &kp TAB
+            >;
+        };
+
+        COL {
+            display-name = "Colemak";
+            bindings = <
+&trans  &kp Q  &kp W  &kp F   &kp P  &kp B     &kp J   &kp L  &kp U      &kp Y       &kp SQT    &trans
+&trans  &kp A  &kp R  &kp S   &kp T  &kp G     &kp M   &kp N  &kp E      &kp I       &kp O      &trans
+&trans  &kp Z  &kp X  &kp C   &kp D  &kp V     &kp K   &kp H  &kp COMMA  &kp PERIOD  &kp SLASH  &trans
+                      &trans  &mo NUM  &trans    &trans  &mo SYM  &trans
             >;
         };
 
@@ -237,16 +247,6 @@
 &trans  &mkp MCLK  &trans  &trans        &mkp LCLK       &mkp RCLK    &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
 &trans  &trans     &trans  &msc SCRL_UP  &msc SCRL_DOWN  &trans       &trans          &trans          &trans        &trans           &trans  &trans
                            &trans        &trans          &trans       &trans          &trans          &trans
-            >;
-        };
-
-        COL {
-            display-name = "Colemak";
-            bindings = <
-&trans  &kp Q  &kp W  &kp F   &kp P  &kp B     &kp J   &kp L  &kp U      &kp Y       &kp SQT    &trans
-&trans  &kp A  &kp R  &kp S   &kp T  &kp G     &kp M   &kp N  &kp E      &kp I       &kp O      &trans
-&trans  &kp Z  &kp X  &kp C   &kp D  &kp V     &kp K   &kp H  &kp COMMA  &kp PERIOD  &kp SLASH  &trans
-                      &trans  &mo NUM  &trans    &trans  &mo SYM  &trans
             >;
         };
 
