@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corne ZMK Layout Visualizer</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .key { transition: all 0.2s; font-family: 'Fira Code', monospace; }
+        .key:hover { transform: translateY(-2px); filter: brightness(1.2); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const LAYERS = {
+            BASE: {
+                name: "Base",
+                description: "Alpha layer with Home Row Mods (Shift, Ctrl, Cmd, Alt)",
+                left: [
+                    ["DEL", "Q", "W", "E", "R", "T"],
+                    ["⌃", "A (⇧)", "S (⌃)", "D (⌘)", "F (⌥)", "G"],
+                    ["⇧", "Z", "X", "C", "V", "B"]
+                ],
+                right: [
+                    ["Y", "U", "I", "O", "P", "⌫"],
+                    ["H", "J (⌥)", "K (⌘)", "L (⌃)", "; (⇧)", "'"],
+                    ["N", "M", ",", ".", "/", "⇧"]
+                ],
+                thumbs: ["ESC (MSE)", "NUM", "ENT", "SPC", "SYM", "TAB"]
+            },
+            COL: {
+                name: "Colemak",
+                description: "Colemak-DH Alphas for ergonomic typing",
+                left: [
+                    ["", "Q", "W", "F", "P", "B"],
+                    ["", "A", "R", "S", "T", "G"],
+                    ["", "Z", "X", "C", "D", "V"]
+                ],
+                right: [
+                    ["J", "L", "U", "Y", "'", ""],
+                    ["M", "N", "E", "I", "O", ""],
+                    ["K", "H", ",", ".", "/", ""]
+                ],
+                thumbs: ["", "NUM", "", "", "SYM", ""]
+            },
+            NUM: {
+                name: "Numbers/BT",
+                description: "Numbers, Bluetooth profile selection, and Brightness/Volume",
+                left: [
+                    ["`", "1", "2", "3", "4", "5"],
+                    ["", "BT 0", "BT 1", "BT 2", "BT 3", "BT 4"],
+                    ["⇧", "BRI-", "BRI+", "VOL-", "VOL+", "MUTE"]
+                ],
+                right: [
+                    ["6", "7", "8", "9", "0", "⌫"],
+                    ["←", "↓", "↑", "→", "", ""],
+                    ["", "", "", "", "TOG COL", ""]
+                ],
+                thumbs: ["", "", "", "⌃", "", ""]
+            },
+            SYM: {
+                name: "Symbols",
+                description: "Coding symbols optimized for JavaScript/TypeScript development",
+                left: [
+                    ["TAB", "!", "@", "#", "$", "%"],
+                    ["⌃", "^", "&", "*", "_", "+"],
+                    ["⇧", "~", "|", "\\", "-", "="]
+                ],
+                right: [
+                    ["{", "}", "(", ")", "`", "⌫"],
+                    ["[", "]", ":", "\"", ";", "'"],
+                    ["<", ">", "?", "'", ".", "ESC"]
+                ],
+                thumbs: ["", "NUM", "", "", "", ""]
+            },
+            MSE: {
+                name: "Mouse",
+                description: "Mouse movement, clicks, and scroll wheel emulation",
+                left: [
+                    ["", "", "F2", "", "", ""],
+                    ["", "MCLK", "", "", "LCLK", "RCLK"],
+                    ["", "", "", "SCRL↑", "SCRL↓", ""]
+                ],
+                right: [
+                    ["", "", "", "", "", "OUT"],
+                    ["M-←", "M-↓", "M-↑", "M-→", "", ""],
+                    ["", "", "", "", "", ""]
+                ],
+                thumbs: ["", "", "", "", "", ""]
+            },
+            NAV: {
+                name: "Navigation",
+                description: "F-keys, Window management (Magnet), and VS Code shortcuts",
+                left: [
+                    ["F1", "F2", "F3", "F4", "F5", "F6"],
+                    ["", "", "Raycast", "Cmd+K", "", ""],
+                    ["Snap L", "Snap C", "Snap M", "Snap R", "", ""]
+                ],
+                right: [
+                    ["F7", "F8", "F9", "F10", "F11", "F12"],
+                    ["←", "↓", "↑", "→", "", ""],
+                    ["HOME", "Tab-", "Tab+", "END", "Term", "File"]
+                ],
+                thumbs: ["", "", "", "", "", ""]
+            }
+        };
+
+        const COMBOS = [
+            { keys: "D + F", result: "=>", desc: "Arrow Function" },
+            { keys: "S + D", result: "${}", desc: "JS Interpolation" },
+            { keys: "F + G", result: "!==", desc: "Strict Inequality" },
+            { keys: "J + K", result: "ESC", desc: "Vim-style Escape" },
+            { keys: "K + L", result: ";", desc: "End of Line" },
+            { keys: "I + O", result: "📸", desc: "Screenshot to Clipboard" }
+        ];
+
+        function Key({ label, type = "normal" }) {
+            const bgClass = {
+                normal: "bg-slate-800 text-slate-200",
+                mod: "bg-indigo-900 text-indigo-200",
+                layer: "bg-amber-900 text-amber-200",
+                special: "bg-emerald-900 text-emerald-200",
+                empty: "bg-slate-900/30 text-slate-700 border-dashed"
+            }[type];
+
+            return (
+                <div className={`key ${bgClass} w-14 h-14 rounded-lg flex flex-col items-center justify-center text-[11px] font-bold border border-slate-700 m-0.5 cursor-default shadow-lg`}>
+                    <span className="text-center px-1">{label || ""}</span>
+                </div>
+            );
+        }
+
+        function App() {
+            const [activeLayer, setActiveLayer] = useState("BASE");
+
+            const renderSide = (sideData) => (
+                <div className="grid grid-rows-3 gap-0.5">
+                    {sideData.map((row, i) => (
+                        <div key={i} className="flex">
+                            {row.map((key, j) => {
+                                let type = "normal";
+                                if (!key) type = "empty";
+                                else if (key.includes("(") || ["⌃", "⇧", "DEL", "⌫", "ESC"].includes(key)) type = "mod";
+                                else if (["NUM", "SYM", "NAV", "MSE", "COL"].some(l => key.includes(l))) type = "layer";
+                                else if (["Raycast", "Term", "File", "Snap", "OUT"].some(s => key.includes(s))) type = "special";
+                                return <Key key={j} label={key} type={type} />;
+                            })}
+                        </div>
+                    ))}
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen p-8 flex flex-col items-center">
+                    <header className="text-center mb-10">
+                        <h1 className="text-4xl font-bold text-sky-400 mb-2">Corne ZMK Configuration</h1>
+                        <p className="text-slate-400 font-mono text-sm">v3.0 - {new Date().toLocaleDateString()}</p>
+                    </header>
+
+                    <div className="flex flex-wrap justify-center gap-2 mb-10 bg-slate-900 p-2 rounded-xl border border-slate-800">
+                        {Object.keys(LAYERS).map(layer => (
+                            <button
+                                key={layer}
+                                onClick={() => setActiveLayer(layer)}
+                                className={`px-5 py-2 rounded-lg font-semibold transition-all ${activeLayer === layer ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/30' : 'text-slate-400 hover:text-white'}`}
+                            >
+                                {LAYERS[layer].name}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="bg-slate-900/50 p-10 rounded-3xl border border-slate-800 shadow-2xl mb-10 backdrop-blur-sm">
+                        <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+                            {/* Left Half */}
+                            <div className="flex flex-col items-end">
+                                {renderSide(LAYERS[activeLayer].left)}
+                                <div className="flex mt-3 mr-1">
+                                    {LAYERS[activeLayer].thumbs.slice(0, 3).map((key, i) => (
+                                        <Key key={i} label={key} type={key ? "layer" : "empty"} />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Right Half */}
+                            <div className="flex flex-col items-start">
+                                {renderSide(LAYERS[activeLayer].right)}
+                                <div className="flex mt-3 ml-1">
+                                    {LAYERS[activeLayer].thumbs.slice(3, 6).map((key, i) => (
+                                        <Key key={i} label={key} type={key ? "layer" : "empty"} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="mt-8 text-center text-slate-400 text-sm max-w-2xl mx-auto">
+                            <span className="text-sky-400 font-bold uppercase mr-2">{LAYERS[activeLayer].name}:</span>
+                            {LAYERS[activeLayer].description}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+                        <div className="bg-slate-900/80 p-6 rounded-2xl border border-slate-800">
+                            <h2 className="text-xl font-bold text-emerald-400 mb-4 flex items-center">
+                                ⚡️ Power Combos
+                            </h2>
+                            <div className="space-y-3">
+                                {COMBOS.map((combo, i) => (
+                                    <div key={i} className="flex justify-between items-center border-b border-slate-800 pb-2 last:border-0">
+                                        <span className="font-mono bg-slate-800 px-2 py-1 rounded text-sky-300 text-xs">{combo.keys}</span>
+                                        <span className="font-bold text-white">→ {combo.result}</span>
+                                        <span className="text-xs text-slate-500">{combo.desc}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-900/80 p-6 rounded-2xl border border-slate-800">
+                            <h2 className="text-xl font-bold text-sky-400 mb-4 flex items-center">
+                                🧘 Design Philosophy
+                            </h2>
+                            <ul className="text-sm text-slate-300 space-y-3 list-disc list-inside">
+                                <li><b>Home Row Mods:</b> Hold A/S/D/F or J/K/L/; for modifiers to minimize hand movement.</li>
+                                <li><b>Tri-Layer Nav:</b> Hold NUM + SYM simultaneously to activate the Navigation layer.</li>
+                                <li><b>Contextual Thumbs:</b> Left thumb handles Esc/Mouse, right thumb handles space/tab.</li>
+                                <li><b>Magnet Integration:</b> Direct window snapping via the Nav layer (Snap L/C/M/R).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

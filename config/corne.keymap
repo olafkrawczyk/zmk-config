@@ -227,16 +227,16 @@
             display-name = "Symbol";
 
             // -----------------------------------------------------------------------------------------
-            // |  TAB |  !  |  <  |  >  |  "  |  .  |   |  &  |  $  |  [  |  ]  |  %  | BSPC |
-            // | CTRL |  #  |  -  |  =  |  @  |  +  |   |  |  |  (  |  )  |  /  |  ;  |  '   |
-            // | SHFT |  ^  |  *  |  `  |  \  |  _  |   |  ?  |  {  |  }  |  :  |  ~  | ESC  |
+            // |  TAB |  !  |  @  |  #  |  $  |  %  |   |  {  |  }  |  (  |  )  |  `  | BSPC |
+            // | CTRL |  ^  |  &  |  *  |  _  |  +  |   |  [  |  ]  |  :  |  "  |  ;  |  '   |
+            // | SHFT |  ~  |  |  |  \  |  -  |  =  |   |  <  |  >  |  ?  |  '  |  .  | ESC  |
             //                    | GUI | NUM | ENT |   | SPC | SYM  | TAB |
 
             bindings = <
-&kp TAB    &kp EXCL   &kp LESS_THAN  &kp GREATER_THAN  &kp DOUBLE_QUOTES  &kp PERIOD    &kp AMPERSAND  &kp DOLLAR  &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp PERCENT   &kp BSPC
-&kp LCTRL  &kp HASH   &kp MINUS      &kp EQUAL         &kp AT_SIGN        &kp PLUS      &kp PIPE       &kp LPAR    &kp RPAR              &kp SLASH              &kp SEMI      &kp SQT
-&kp LSHFT  &kp CARET  &kp ASTERISK   &kp GRAVE         &kp BSLH           &kp UNDERSCORE &kp QUESTION   &kp LBRC    &kp RBRC              &kp COLON              &kp TILDE     &kp ESC
-                                     &trans            &mo NUM            &trans        &trans         &trans      &trans
+&kp TAB    &kp EXCL   &kp AT_SIGN    &kp HASH       &kp DOLLAR      &kp PERCENT    &kp LBRC          &kp RBRC           &kp LPAR      &kp RPAR           &kp GRAVE  &kp BSPC
+&kp LCTRL  &kp CARET  &kp AMPERSAND  &kp ASTERISK   &kp UNDERSCORE  &kp PLUS       &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp COLON     &kp DOUBLE_QUOTES  &kp SEMI   &kp SQT
+&kp LSHFT  &kp TILDE  &kp PIPE       &kp BSLH       &kp MINUS       &kp EQUAL      &kp LESS_THAN     &kp GREATER_THAN   &kp QUESTION  &kp SQT            &kp PERIOD &kp ESC
+                                     &trans         &mo NUM         &trans         &trans            &trans             &trans
             >;
         };
 
