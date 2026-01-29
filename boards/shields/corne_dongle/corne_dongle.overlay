@@ -1,5 +1,5 @@
 #include <dt-bindings/zmk/matrix_transform.h>
-#include "../esb_addr.dtsi"
+#include "../../config/esb_addr.dtsi"
 
 / {
     chosen {
