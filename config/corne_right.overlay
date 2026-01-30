@@ -1,9 +1,9 @@
 / {
     esb_split {
         compatible = "zmk,esb-split";
-        // Peripherals expect 4-byte base addresses in this module version
-        base-addr-0 = [E7 E7 E7 E7];
-        base-addr-1 = [C2 C2 C2 C2];
-        addr-prefix = [E7 C2 C3 C4];
+        // Peripherals expect 4-byte base addresses
+        base-addr-0 = /bits/ 8 <0xE7 0xE7 0xE7 0xE7>;
+        base-addr-1 = /bits/ 8 <0xC2 0xC2 0xC2 0xC2>;
+        addr-prefix = /bits/ 8 <0xE7 0xC2 0xC3 0xC4>;
     };
 };

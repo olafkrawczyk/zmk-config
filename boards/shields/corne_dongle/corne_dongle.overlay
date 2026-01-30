@@ -3,10 +3,10 @@
 / {
     esb_split {
         compatible = "zmk,esb-split";
-        // Square brackets [] define a byte array (1 byte per element)
-        base-addr-0 = [E7 E7 E7 E7 E7 E7 E7 E7];
-        base-addr-1 = [C2 C2 C2 C2 C2 C2 C2 C2];
-        addr-prefix = [E7 C2 C3 C4];
+        // /bits/ 8 tells DTS to store these as 1-byte elements
+        base-addr-0 = /bits/ 8 <0xE7 0xE7 0xE7 0xE7 0xE7 0xE7 0xE7 0xE7>;
+        base-addr-1 = /bits/ 8 <0xC2 0xC2 0xC2 0xC2 0xC2 0xC2 0xC2 0xC2>;
+        addr-prefix = /bits/ 8 <0xE7 0xC2 0xC3 0xC4>;
     };
 
     chosen {
@@ -27,7 +27,7 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6) RC(2,7) RC(2,8) RC(2,9)
     };
 
     mock_kscan: kscan {
-        compatible = "zmk,kscan-mock";
+        compatible = "zmk,kscan-none";
         columns = <12>;
         rows = <4>;
         events = <0>;
