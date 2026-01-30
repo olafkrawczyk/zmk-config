@@ -38,21 +38,8 @@ static void update_layer_status() {
 static void update_battery_status() {
     if (battery_label == NULL) return;
 
-    uint8_t level = 0;
-    
-    // We try to get the battery level of the Dongle (Central)
-    // In ESB proxy mode, getting peripheral battery levels is complex without the full widget
-    // So we just show the central's level for now as a proxy.
-    // (Actual peripheral battery proxying requires deeper hooks)
-    
-    // Using simple ZMK API to get state of charge
-    // Note: This might return the Dongle's battery (which is N/A if USB powered) or 0.
-    // We check if it returns a valid value.
-    
-    // For now, we just display a placeholder or the raw value if available.
-    // Real implementation would need to listen to specific peripheral events.
-    
-    lv_label_set_text(battery_label, "BAT: --%");
+    uint8_t level = zmk_battery_state_of_charge();
+    lv_label_set_text_fmt(battery_label, "BAT: %d%%", level);
 }
 
 // --- Event Listeners ---
@@ -67,8 +54,15 @@ int layer_listener(const zmk_event_t *eh) {
 ZMK_LISTENER(custom_layer_status, layer_listener);
 ZMK_SUBSCRIPTION(custom_layer_status, zmk_layer_state_changed);
 
-// Note: Battery listener skipped for now as simple API usage is tricky without full context.
-// We initialize with a static value.
+int battery_listener(const zmk_event_t *eh) {
+    if (zmk_event_check(eh, ZMK_EVENT_BATTERY_STATE_CHANGED)) {
+        update_battery_status();
+    }
+    return ZMK_EV_EVENT_BUBBLE;
+}
+
+ZMK_LISTENER(custom_battery_status, battery_listener);
+ZMK_SUBSCRIPTION(custom_battery_status, zmk_battery_state_changed);
 
 // --- Screen Setup ---
 
