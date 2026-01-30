@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <zmk/display/widgets/layer_status.h>
 #include <zmk/display/status_screen.h>
 #include <zmk/battery.h>
 #include <zmk/keymap.h>
@@ -16,8 +15,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static lv_obj_t *layer_label;
 static lv_obj_t *battery_label;
-
-// --- Update Functions ---
 
 static void update_layer_status() {
     if (layer_label == NULL) return;
@@ -39,12 +36,8 @@ static void update_battery_status() {
     lv_label_set_text_fmt(battery_label, "%d%%", level);
 }
 
-// --- Event Listeners ---
-
 int layer_listener(const zmk_event_t *eh) {
-    if (zmk_event_check(eh, ZMK_EVENT_LAYER_STATE_CHANGED)) {
-        update_layer_status();
-    }
+    update_layer_status();
     return ZMK_EV_EVENT_BUBBLE;
 }
 
@@ -52,38 +45,32 @@ ZMK_LISTENER(custom_layer_status, layer_listener);
 ZMK_SUBSCRIPTION(custom_layer_status, zmk_layer_state_changed);
 
 int battery_listener(const zmk_event_t *eh) {
-    if (zmk_event_check(eh, ZMK_EVENT_BATTERY_STATE_CHANGED)) {
-        update_battery_status();
-    }
+    update_battery_status();
     return ZMK_EV_EVENT_BUBBLE;
 }
 
 ZMK_LISTENER(custom_battery_status, battery_listener);
 ZMK_SUBSCRIPTION(custom_battery_status, zmk_battery_state_changed);
 
-// --- Screen Setup ---
-
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
     
-    // Style for high visibility on monochrome
-    static lv_style_t style_base;
-    lv_style_init(&style_base);
-    lv_style_set_text_color(&style_base, lv_color_black());
-    lv_style_set_bg_color(&style_base, lv_color_white());
-    
-    lv_obj_add_style(screen, &style_base, LV_PART_MAIN);
+    // Set screen background to white (Sharp Memory displays are usually white when unset)
+    lv_obj_set_style_bg_color(screen, lv_color_white(), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, LV_PART_MAIN);
 
-    // 1. Layer Label (Top)
+    // Layer Label
     layer_label = lv_label_create(screen);
-    lv_obj_align(layer_label, LV_ALIGN_TOP_MID, 0, 20);
-    lv_obj_set_style_text_font(layer_label, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_color(layer_label, lv_color_black(), LV_PART_MAIN);
+    lv_obj_set_style_text_font(layer_label, &lv_font_montserrat_14, LV_PART_MAIN);
+    lv_obj_align(layer_label, LV_ALIGN_CENTER, 0, -10);
     update_layer_status();
 
-    // 2. Battery Label (Bottom)
+    // Battery Label
     battery_label = lv_label_create(screen);
-    lv_obj_align(battery_label, LV_ALIGN_BOTTOM_MID, 0, -20);
-    lv_obj_set_style_text_font(battery_label, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_color(battery_label, lv_color_black(), LV_PART_MAIN);
+    lv_obj_set_style_text_font(battery_label, &lv_font_montserrat_12, LV_PART_MAIN);
+    lv_obj_align(battery_label, LV_ALIGN_BOTTOM_MID, 0, -5);
     update_battery_status();
 
     return screen;
