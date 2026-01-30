@@ -14,9 +14,6 @@
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-// Simple status screen to display Battery % and Active Layer
-// without relying on the nice_view built-in widget which depends on BLE.
-
 static lv_obj_t *layer_label;
 static lv_obj_t *battery_label;
 
@@ -31,7 +28,7 @@ static void update_layer_status() {
     if (name != NULL) {
         lv_label_set_text(layer_label, name);
     } else {
-        lv_label_set_text_fmt(layer_label, "Layer %d", layer);
+        lv_label_set_text_fmt(layer_label, "L:%d", layer);
     }
 }
 
@@ -39,7 +36,7 @@ static void update_battery_status() {
     if (battery_label == NULL) return;
 
     uint8_t level = zmk_battery_state_of_charge();
-    lv_label_set_text_fmt(battery_label, "BAT: %d%%", level);
+    lv_label_set_text_fmt(battery_label, "%d%%", level);
 }
 
 // --- Event Listeners ---
@@ -69,14 +66,24 @@ ZMK_SUBSCRIPTION(custom_battery_status, zmk_battery_state_changed);
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
     
-    // 1. Layer Label (Top Center, Large)
+    // Style for high visibility on monochrome
+    static lv_style_t style_base;
+    lv_style_init(&style_base);
+    lv_style_set_text_color(&style_base, lv_color_black());
+    lv_style_set_bg_color(&style_base, lv_color_white());
+    
+    lv_obj_add_style(screen, &style_base, LV_PART_MAIN);
+
+    // 1. Layer Label (Top)
     layer_label = lv_label_create(screen);
-    lv_obj_align(layer_label, LV_ALIGN_CENTER, 0, -10);
+    lv_obj_align(layer_label, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_set_style_text_font(layer_label, &lv_font_montserrat_14, 0);
     update_layer_status();
 
-    // 2. Battery Label (Bottom Center, Small)
+    // 2. Battery Label (Bottom)
     battery_label = lv_label_create(screen);
-    lv_obj_align(battery_label, LV_ALIGN_BOTTOM_MID, 0, -10);
+    lv_obj_align(battery_label, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_obj_set_style_text_font(battery_label, &lv_font_montserrat_14, 0);
     update_battery_status();
 
     return screen;
