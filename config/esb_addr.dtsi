@@ -1,9 +1,19 @@
+#include <dt-bindings/zmk/matrix_transform.h>
+
 / {
     esb_split {
         compatible = "zmk,esb-split";
-        // Arbitrary addresses - change these if you have multiple boards!
+        
+#if defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL) && CONFIG_ZMK_SPLIT_ROLE_CENTRAL
+        // Dongle (Central) expects 8 bytes for these properties
         base-addr-0 = <0xE7 0xE7 0xE7 0xE7 0xE7 0xE7 0xE7 0xE7>;
         base-addr-1 = <0xC2 0xC2 0xC2 0xC2 0xC2 0xC2 0xC2 0xC2>;
+#else
+        // Peripherals expect exactly 4 bytes
+        base-addr-0 = <0xE7 0xE7 0xE7 0xE7>;
+        base-addr-1 = <0xC2 0xC2 0xC2 0xC2>;
+#endif
+        // Both roles agree on 4 bytes for the prefix in this module version
         addr-prefix = <0xE7 0xC2 0xC3 0xC4>;
     };
 };
