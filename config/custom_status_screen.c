@@ -24,6 +24,24 @@ static lv_obj_t *layer_label;
 static lv_obj_t *battery_label;
 static lv_timer_t *refresh_timer;
 
+static int custom_status_screen_init(const struct device *dev) {
+    ARG_UNUSED(dev);
+    LOG_INF("Custom status screen module init");
+#if DT_HAS_CHOSEN(zephyr_display)
+    const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+    if (device_is_ready(display)) {
+        LOG_INF("Display device ready in init");
+    } else {
+        LOG_ERR("Display device not ready in init");
+    }
+#else
+    LOG_ERR("No zephyr_display chosen in init");
+#endif
+    return 0;
+}
+
+SYS_INIT(custom_status_screen_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+
 // --- Update Functions ---
 
 #if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
