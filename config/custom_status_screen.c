@@ -9,6 +9,9 @@
 #include <zmk/keymap.h>
 #include <zmk/events/battery_state_changed.h>
 #include <zmk/events/layer_state_changed.h>
+#include <zephyr/device.h>
+#include <zephyr/devicetree.h>
+#include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
 
@@ -83,6 +86,20 @@ ZMK_SUBSCRIPTION(custom_battery_status, zmk_battery_state_changed);
 
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
+
+#if DT_HAS_CHOSEN(zephyr_display)
+    const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
+    if (device_is_ready(display)) {
+        display_blanking_off(display);
+        LOG_INF("Display ready, unblanked");
+    } else {
+        LOG_ERR("Display device not ready");
+    }
+#else
+    LOG_ERR("No zephyr_display chosen");
+#endif
+
+    LOG_INF("Custom status screen init");
     
     // 1. Layer Label (Top Center, Large)
 #if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
