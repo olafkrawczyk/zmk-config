@@ -38,7 +38,7 @@
   - Enabling `CONFIG_LVGL=y` on left/right.
 
 ### Current State
-- CI builds should pass after last changes.
+- CI builds still failing earlier due to custom screen linking errors (see below).
 - Screens still blank; logs show no `custom_status_screen:` printk lines yet.
 - Expectation: with `cmake: config` + `dts_root` + conditional build + LVGL enabled,
   the custom screen code should now be linked and printk lines should appear.
@@ -76,12 +76,16 @@
 - `dts_root` schema error (fixed by proper module.yml structure)
 - LVGL missing in xiao_ble build (gated custom screen + LVGL only on halves)
 - SYS_INIT signature mismatch and event manager link errors
+- Link errors in xiao_ble build (undefined LVGL/keymap symbols) addressed by
+  gating `custom_status_screen.c` on `CONFIG_ZMK_DISPLAY && CONFIG_LVGL &&
+  CONFIG_ZMK_DISPLAY_STATUS_SCREEN_CUSTOM` and guarding `zmk_keymap_layer_name`.
 
 ### Next Steps
 - Rebuild and flash left/right with latest changes.
 - Capture boot logs and confirm `custom_status_screen:` printk lines appear.
   - If they appear, verify `display ready/unblanked` messages.
   - If they do **not** appear, verify that the flashed artifact matches the latest CI run.
+- Re-run CI to confirm linker errors are gone in xiao_ble/settings_reset builds.
 - If screen init logs appear but display still blank:
   - Check for chosen display node and device readiness in logs.
   - Consider temporarily switching to built-in status screen to isolate hardware.
