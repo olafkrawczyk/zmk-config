@@ -25,7 +25,10 @@ static lv_obj_t *battery_label;
 static lv_timer_t *refresh_timer;
 
 static int custom_status_screen_init(void) {
-    printk("custom_status_screen: init\n");
+    // Force explicit init call if sys_init is too early or failing
+    // but typically SYS_INIT at APPLICATION priority is fine.
+    // Let's add a raw printk to confirm we are running.
+    printk("custom_status_screen: SYS_INIT reached\n");
     LOG_INF("Custom status screen module init");
 #if DT_HAS_CHOSEN(zephyr_display)
     const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
@@ -113,7 +116,7 @@ static void refresh_timer_cb(lv_timer_t *timer) {
 
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
-    printk("custom_status_screen: screen create\n");
+    printk("custom_status_screen: screen create called\n");
 
 #if DT_HAS_CHOSEN(zephyr_display)
     const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
