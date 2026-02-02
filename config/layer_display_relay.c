@@ -24,7 +24,7 @@ static int send_layer_to_left(uint8_t layer) {
     }
 
     struct zmk_behavior_binding binding = {
-        .behavior_dev = layer_display_behavior,
+        .behavior_dev = "LAYER_DISPLAY",
         .param1 = layer,
         .param2 = 0,
     };
@@ -32,7 +32,7 @@ static int send_layer_to_left(uint8_t layer) {
     struct zmk_behavior_binding_event event = {0};
 
     int err = zmk_split_central_invoke_behavior(CONFIG_ZMK_LAYER_DISPLAY_LEFT_SOURCE, &binding,
-                                                &event, true);
+                                                event, true);
     if (err == 0) {
         last_sent_layer = layer;
     }
