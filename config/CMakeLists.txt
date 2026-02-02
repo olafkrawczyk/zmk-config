@@ -1,8 +1,6 @@
 # Source the custom status screen and user modules
 zephyr_library_include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-if(CONFIG_ZMK_DISPLAY AND CONFIG_LVGL AND CONFIG_ZMK_DISPLAY_STATUS_SCREEN_CUSTOM)
-  zephyr_library_sources(custom_status_screen.c)
-endif()
+zephyr_library_sources_ifdef(CONFIG_ZMK_DISPLAY_STATUS_SCREEN_CUSTOM custom_status_screen.c)
 zephyr_library_sources(layer_display_state.c)
 
 if(CONFIG_ZMK_KEYMAP)
