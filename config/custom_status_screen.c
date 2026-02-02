@@ -6,13 +6,14 @@
 
 #include <zmk/display/status_screen.h>
 #include <zmk/battery.h>
-#include <zmk/keymap.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
 #include <zephyr/sys/printk.h>
+#include <zephyr/sys/util.h>
+#include <stdio.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -49,18 +50,47 @@ SYS_INIT(custom_status_screen_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORIT
 #if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
 #include "layer_display_state.h"
 
+/*
+ * Avoid a hard link-time dependency on ZMK's keymap implementation.
+ * We can derive layer names directly from the keymap devicetree (display-name/label).
+ *
+ * This prevents "undefined reference to zmk_keymap_layer_name" on targets/configs
+ * where the keymap module is not built/linked (e.g. dongle/minimal builds).
+ */
+#define DT_DRV_COMPAT zmk_keymap
+#if DT_HAS_COMPAT_STATUS_OKAY(zmk_keymap)
+#define _LAYER_NAME(node_id) DT_PROP_OR(node_id, display_name, DT_PROP_OR(node_id, label, ""))
+static const char *layer_names[] = {
+    DT_FOREACH_CHILD_STATUS_OKAY_SEP(DT_INST(0, zmk_keymap), _LAYER_NAME, (, ))};
+
+static const char *layer_name_from_dt(uint8_t layer) {
+    if (layer < ARRAY_SIZE(layer_names)) {
+        const char *name = layer_names[layer];
+        if (name != NULL && name[0] != '\0') {
+            return name;
+        }
+    }
+    return NULL;
+}
+#else
+static const char *layer_name_from_dt(uint8_t layer) {
+    ARG_UNUSED(layer);
+    return NULL;
+}
+#endif
+
 static void update_layer_status() {
     if (layer_label == NULL) return;
 
     uint8_t layer = zmk_layer_display_get();
-#if IS_ENABLED(CONFIG_ZMK_KEYMAP)
-    const char *name = zmk_keymap_layer_name(layer);
+    const char *name = layer_name_from_dt(layer);
     if (name != NULL) {
         lv_label_set_text(layer_label, name);
         return;
     }
-#endif
-    lv_label_set_text_fmt(layer_label, "Layer %d", layer);
+    char buf[16];
+    snprintf(buf, sizeof(buf), "Layer %u", layer);
+    lv_label_set_text(layer_label, buf);
 }
 #endif
 
@@ -68,7 +98,9 @@ static void update_battery_status() {
     if (battery_label == NULL) return;
 
     uint8_t level = zmk_battery_state_of_charge();
-    lv_label_set_text_fmt(battery_label, "BAT: %d%%", level);
+    char buf[16];
+    snprintf(buf, sizeof(buf), "BAT: %u%%", level);
+    lv_label_set_text(battery_label, buf);
 }
 
 static void refresh_timer_cb(lv_timer_t *timer) {

@@ -79,6 +79,7 @@
 - Link errors in xiao_ble build (undefined LVGL/keymap symbols) addressed by
   gating `custom_status_screen.c` on `CONFIG_ZMK_DISPLAY && CONFIG_LVGL &&
   CONFIG_ZMK_DISPLAY_STATUS_SCREEN_CUSTOM` and guarding `zmk_keymap_layer_name`.
+- Build failure from missing `<drivers/behavior.h>` fixed by using `<zmk/behavior.h>`.
 
 ### Next Steps
 - Rebuild and flash left/right with latest changes.
