@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include <zmk/display/widgets/layer_status.h>
 #include <zmk/display/status_screen.h>
 #include <zmk/battery.h>
 #include <zmk/keymap.h>
@@ -22,10 +21,13 @@ static lv_obj_t *battery_label;
 
 // --- Update Functions ---
 
+#if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
+#include "layer_display_state.h"
+
 static void update_layer_status() {
     if (layer_label == NULL) return;
 
-    uint8_t layer = zmk_keymap_highest_layer_active();
+    uint8_t layer = zmk_layer_display_get();
     const char *name = zmk_keymap_layer_name(layer);
 
     if (name != NULL) {
@@ -34,6 +36,7 @@ static void update_layer_status() {
         lv_label_set_text_fmt(layer_label, "Layer %d", layer);
     }
 }
+#endif
 
 static void update_battery_status() {
     if (battery_label == NULL) return;
@@ -44,6 +47,7 @@ static void update_battery_status() {
 
 // --- Event Listeners ---
 
+#if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
 int layer_listener(const zmk_event_t *eh) {
     if (zmk_event_check(eh, ZMK_EVENT_LAYER_STATE_CHANGED)) {
         update_layer_status();
@@ -53,6 +57,7 @@ int layer_listener(const zmk_event_t *eh) {
 
 ZMK_LISTENER(custom_layer_status, layer_listener);
 ZMK_SUBSCRIPTION(custom_layer_status, zmk_layer_state_changed);
+#endif
 
 int battery_listener(const zmk_event_t *eh) {
     if (zmk_event_check(eh, ZMK_EVENT_BATTERY_STATE_CHANGED)) {
@@ -70,9 +75,14 @@ lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
     
     // 1. Layer Label (Top Center, Large)
+#if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
     layer_label = lv_label_create(screen);
     lv_obj_align(layer_label, LV_ALIGN_CENTER, 0, -10);
+    zmk_layer_display_register_update_cb(update_layer_status);
     update_layer_status();
+#else
+    layer_label = NULL;
+#endif
 
     // 2. Battery Label (Bottom Center, Small)
     battery_label = lv_label_create(screen);

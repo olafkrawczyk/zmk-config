@@ -1,2 +1,5 @@
-# Source the custom status screen
+# Source the custom status screen and user modules
+zephyr_library_include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 zephyr_library_sources(custom_status_screen.c)
+zephyr_library_sources(layer_display_state.c behavior_layer_display.c)
+zephyr_library_sources_ifdef(CONFIG_ZMK_LAYER_DISPLAY_RELAY layer_display_relay.c)
