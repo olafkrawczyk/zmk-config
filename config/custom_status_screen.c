@@ -7,8 +7,6 @@
 #include <zmk/display/status_screen.h>
 #include <zmk/battery.h>
 #include <zmk/keymap.h>
-#include <zmk/events/battery_state_changed.h>
-#include <zmk/events/layer_state_changed.h>
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/display.h>
@@ -25,8 +23,7 @@ static lv_obj_t *layer_label;
 static lv_obj_t *battery_label;
 static lv_timer_t *refresh_timer;
 
-static int custom_status_screen_init(const struct device *dev) {
-    ARG_UNUSED(dev);
+static int custom_status_screen_init(void) {
     printk("custom_status_screen: init\n");
     LOG_INF("Custom status screen module init");
 #if DT_HAS_CHOSEN(zephyr_display)
@@ -80,30 +77,6 @@ static void refresh_timer_cb(lv_timer_t *timer) {
 #endif
     update_battery_status();
 }
-
-// --- Event Listeners ---
-
-#if IS_ENABLED(CONFIG_ZMK_DISPLAY_SHOW_LAYER)
-int layer_listener(const zmk_event_t *eh) {
-    if (zmk_event_check(eh, ZMK_EVENT_LAYER_STATE_CHANGED)) {
-        update_layer_status();
-    }
-    return ZMK_EV_EVENT_BUBBLE;
-}
-
-ZMK_LISTENER(custom_layer_status, layer_listener);
-ZMK_SUBSCRIPTION(custom_layer_status, zmk_layer_state_changed);
-#endif
-
-int battery_listener(const zmk_event_t *eh) {
-    if (zmk_event_check(eh, ZMK_EVENT_BATTERY_STATE_CHANGED)) {
-        update_battery_status();
-    }
-    return ZMK_EV_EVENT_BUBBLE;
-}
-
-ZMK_LISTENER(custom_battery_status, battery_listener);
-ZMK_SUBSCRIPTION(custom_battery_status, zmk_battery_state_changed);
 
 // --- Screen Setup ---
 
