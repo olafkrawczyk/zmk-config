@@ -41,7 +41,7 @@ static int send_layer_to_left(uint8_t layer) {
 }
 
 static int layer_display_relay_listener(const zmk_event_t *eh) {
-    if (!zmk_event_check(eh, ZMK_EVENT_LAYER_STATE_CHANGED)) {
+    if (as_zmk_layer_state_changed(eh) == NULL) {
         return ZMK_EV_EVENT_BUBBLE;
     }
 
