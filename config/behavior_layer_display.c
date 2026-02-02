@@ -2,7 +2,7 @@
 
 #include <zephyr/device.h>
 #include <zephyr/sys/util.h>
-#include <zmk/behavior.h>
+#include <drivers/behavior.h>
 
 #include "layer_display_state.h"
 
