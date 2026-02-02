@@ -14,6 +14,7 @@
 #include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
+#include <zephyr/sys/printk.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
@@ -26,15 +27,19 @@ static lv_timer_t *refresh_timer;
 
 static int custom_status_screen_init(const struct device *dev) {
     ARG_UNUSED(dev);
+    printk("custom_status_screen: init\n");
     LOG_INF("Custom status screen module init");
 #if DT_HAS_CHOSEN(zephyr_display)
     const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
     if (device_is_ready(display)) {
+        printk("custom_status_screen: display ready in init\n");
         LOG_INF("Display device ready in init");
     } else {
+        printk("custom_status_screen: display NOT ready in init\n");
         LOG_ERR("Display device not ready in init");
     }
 #else
+    printk("custom_status_screen: no zephyr_display chosen in init\n");
     LOG_ERR("No zephyr_display chosen in init");
 #endif
     return 0;
@@ -104,16 +109,20 @@ ZMK_SUBSCRIPTION(custom_battery_status, zmk_battery_state_changed);
 
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
+    printk("custom_status_screen: screen create\n");
 
 #if DT_HAS_CHOSEN(zephyr_display)
     const struct device *display = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
     if (device_is_ready(display)) {
         display_blanking_off(display);
+        printk("custom_status_screen: display unblanked\n");
         LOG_INF("Display ready, unblanked");
     } else {
+        printk("custom_status_screen: display NOT ready in screen\n");
         LOG_ERR("Display device not ready");
     }
 #else
+    printk("custom_status_screen: no zephyr_display chosen in screen\n");
     LOG_ERR("No zephyr_display chosen");
 #endif
 
