@@ -53,13 +53,14 @@ static void update_layer_status() {
     if (layer_label == NULL) return;
 
     uint8_t layer = zmk_layer_display_get();
+#if IS_ENABLED(CONFIG_ZMK_KEYMAP)
     const char *name = zmk_keymap_layer_name(layer);
-
     if (name != NULL) {
         lv_label_set_text(layer_label, name);
-    } else {
-        lv_label_set_text_fmt(layer_label, "Layer %d", layer);
+        return;
     }
+#endif
+    lv_label_set_text_fmt(layer_label, "Layer %d", layer);
 }
 #endif
 
