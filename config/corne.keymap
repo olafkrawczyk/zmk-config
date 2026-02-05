@@ -17,8 +17,6 @@
 #define MSE  4
 #define NAV  5
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1400
-
 &mmv { time-to-max-speed-ms = <450>; };
 
 &msc { acceleration-exponent = <1>; };
