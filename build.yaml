@@ -21,6 +21,7 @@
 include:
   - board: xiao_ble
     shield: corne_dongle
+    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y
   - board: xiao_ble
     shield: settings_reset
   - board: nice_nano_v2
