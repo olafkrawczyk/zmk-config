@@ -200,7 +200,7 @@
             display-name = "Colemak";
             bindings = <
 &trans  &kp Q  &kp W  &kp F   &kp P  &kp B     &kp J   &kp L  &kp U      &kp Y       &kp SQT    &trans
-&trans  &kp A  &kp R  &kp S   &kp T  &kp G     &kp M   &kp N  &kp E      &kp I       &kp O      &trans
+&trans  &mode_tap_left LEFT_SHIFT A  &mode_tap_left LEFT_CONTROL R  &mode_tap_left LEFT_GUI S  &mode_tap_left RIGHT_ALT T  &kp G     &kp M   &mode_tap_right RIGHT_ALT N  &mode_tap_right RIGHT_GUI E  &mode_tap_right RIGHT_CONTROL I  &mode_tap_right RIGHT_SHIFT O  &trans
 &trans  &kp Z  &kp X  &kp C   &kp D  &kp V     &kp K   &kp H  &kp COMMA  &kp PERIOD  &kp SLASH  &trans
                       &trans  &mo NUM  &trans    &trans  &mo SYM  &trans
             >;
