@@ -198,6 +198,13 @@
 
         COL {
             display-name = "Colemak";
+
+            // -----------------------------------------------------------------------------------------
+            // | TRAN |  Q  |  W  |  F  |  P  |  B  |   |  J  |  L  |  U  |  Y  |  '  | TRAN |
+            // | TRAN |SFT/A|CTL/R|GUI/S|ALT/T|  G  |   |  M  |ALT/N|GUI/E|CTL/I|SFT/O| TRAN |
+            // | TRAN |  Z  |  X  |  C  |  D  |  V  |   |  K  |  H  |  ,  |  .  |  /  | TRAN |
+            //                    | TRAN| NUM | TRAN|   | TRAN| SYM | TRAN|
+
             bindings = <
 &trans  &kp Q  &kp W  &kp F   &kp P  &kp B     &kp J   &kp L  &kp U      &kp Y       &kp SQT    &trans
 &trans  &mode_tap_left LEFT_SHIFT A  &mode_tap_left LEFT_CONTROL R  &mode_tap_left LEFT_GUI S  &mode_tap_left RIGHT_ALT T  &kp G     &kp M   &mode_tap_right RIGHT_ALT N  &mode_tap_right RIGHT_GUI E  &mode_tap_right RIGHT_CONTROL I  &mode_tap_right RIGHT_SHIFT O  &trans
@@ -243,7 +250,7 @@
         MSE {
             display-name = "Mouse";
             bindings = <
-&trans  &trans     &kp F2  &trans        &trans          &trans       &trans          &trans          &trans        &trans           &trans  &out OUT_TOG
+&bt BT_CLR  &trans     &kp F2  &trans        &trans          &trans       &trans          &trans          &trans        &trans           &trans  &out OUT_TOG
 &trans  &mkp MCLK  &trans  &trans        &mkp LCLK       &mkp RCLK    &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
 &trans  &trans     &trans  &msc SCRL_UP  &msc SCRL_DOWN  &trans       &trans          &trans          &trans        &trans           &trans  &trans
                            &trans        &trans          &trans       &trans          &trans          &trans

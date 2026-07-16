@@ -13,6 +13,126 @@
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
         .key { transition: all 0.2s; font-family: 'Fira Code', monospace; }
         .key:hover { transform: translateY(-2px); filter: brightness(1.2); }
+
+        /* Print-only view is hidden on screen */
+        .print-only { display: none; }
+
+        /* ---------- Ink-efficient black & white print layout ---------- */
+        @media print {
+            /* Reset the dark, colored theme to plain white/black */
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Hide interactive chrome (tabs, buttons, screen keyboard) */
+            .screen-only { display: none !important; }
+
+            /* Reveal the all-layers print view */
+            .print-only { display: block !important; }
+
+            .print-only .print-title {
+                font-size: 20px;
+                font-weight: 700;
+                text-align: center;
+                margin: 0 0 16px 0;
+                color: #000 !important;
+            }
+
+            /* Two layers per printed page */
+            .print-page {
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .print-page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+
+            /* Each layer stays on a single page fragment */
+            .print-layer {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin: 0 0 18px 0;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #ccc;
+            }
+            .print-layer .print-layer-name {
+                font-size: 15px;
+                font-weight: 700;
+                color: #000 !important;
+                margin-bottom: 2px;
+            }
+            .print-layer .print-layer-desc {
+                font-size: 11px;
+                color: #444 !important;
+                margin-bottom: 8px;
+            }
+
+            /* Force the two keyboard halves side-by-side, like a real split keyboard */
+            .print-only .print-board {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: center !important;
+                align-items: flex-start !important;
+                gap: 32px !important;
+            }
+
+            /* Keys: white fill, thin gray borders, black text, no shadows.
+               Shrunk so two complete layers fit on one printed page. */
+            .print-only .key {
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 8px !important;
+                border-radius: 4px !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                border: 1px solid #888888 !important;
+                box-shadow: none !important;
+                filter: none !important;
+                transform: none !important;
+                text-shadow: none !important;
+            }
+            /* Light grayscale to distinguish key roles (minimal ink) */
+            .print-only .key[data-type="mod"]     { background: #ececec !important; }
+            .print-only .key[data-type="layer"]   { background: #dcdcdc !important; }
+            .print-only .key[data-type="special"] { background: #ececec !important; }
+            .print-only .key[data-type="empty"] {
+                background: #ffffff !important;
+                border: 1px dashed #cccccc !important;
+                color: #bbbbbb !important;
+            }
+
+            /* Combos + Design Philosophy reference in grayscale */
+            .print-reference { break-inside: avoid; page-break-inside: avoid; }
+            .print-combos h2,
+            .print-philosophy h2 {
+                font-size: 14px;
+                font-weight: 700;
+                color: #000 !important;
+                margin: 12px 0 6px 0;
+            }
+            .print-combos .print-combo-row {
+                font-size: 11px;
+                color: #000 !important;
+                padding: 2px 0;
+                border-bottom: 1px solid #e5e5e5;
+            }
+            .print-philosophy ul {
+                list-style: disc;
+                padding-left: 18px;
+                margin: 0;
+            }
+            .print-philosophy li {
+                font-size: 11px;
+                color: #000 !important;
+                margin-bottom: 4px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -39,15 +159,15 @@
             },
             COL: {
                 name: "Colemak",
-                description: "Colemak-DH Alphas for ergonomic typing",
+                description: "Colemak-DH alphas with home-row mods (hold for Shift/Ctrl/Cmd/Alt)",
                 left: [
                     ["", "Q", "W", "F", "P", "B"],
-                    ["", "A", "R", "S", "T", "G"],
+                    ["", "A (⇧)", "R (⌃)", "S (⌘)", "T (⌥)", "G"],
                     ["", "Z", "X", "C", "D", "V"]
                 ],
                 right: [
                     ["J", "L", "U", "Y", "'", ""],
-                    ["M", "N", "E", "I", "O", ""],
+                    ["M", "N (⌥)", "E (⌘)", "I (⌃)", "O (⇧)", ""],
                     ["K", "H", ",", ".", "/", ""]
                 ],
                 thumbs: ["", "NUM", "", "", "SYM", ""]
@@ -133,16 +253,16 @@
             }[type];
 
             return (
-                <div className={`key ${bgClass} w-14 h-14 rounded-lg flex flex-col items-center justify-center text-[11px] font-bold border border-slate-700 m-0.5 cursor-default shadow-lg`}>
+                <div data-type={type} className={`key ${bgClass} w-14 h-14 rounded-lg flex flex-col items-center justify-center text-[11px] font-bold border border-slate-700 m-0.5 cursor-default shadow-lg`}>
                     <span className="text-center px-1">{label || ""}</span>
                 </div>
             );
         }
 
-        function App() {
-            const [activeLayer, setActiveLayer] = useState("BASE");
-
-            const renderSide = (sideData) => (
+        // Renders one half (left/right) of the keyboard for a layer. Module-scope so
+        // both the interactive view and the print view can reuse it.
+        function renderSide(sideData) {
+            return (
                 <div className="grid grid-rows-3 gap-0.5">
                     {sideData.map((row, i) => (
                         <div key={i} className="flex">
@@ -158,15 +278,98 @@
                     ))}
                 </div>
             );
+        }
+
+        // Full keyboard (both halves + thumbs) for a single layer.
+        function Board({ layerKey }) {
+            const data = LAYERS[layerKey];
+            return (
+                <div className="print-board flex flex-col md:flex-row justify-between items-start gap-12">
+                    {/* Left Half */}
+                    <div className="flex flex-col items-end">
+                        {renderSide(data.left)}
+                        <div className="flex mt-3 mr-1">
+                            {data.thumbs.slice(0, 3).map((key, i) => (
+                                <Key key={i} label={key} type={key ? "layer" : "empty"} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right Half */}
+                    <div className="flex flex-col items-start">
+                        {renderSide(data.right)}
+                        <div className="flex mt-3 ml-1">
+                            {data.thumbs.slice(3, 6).map((key, i) => (
+                                <Key key={i} label={key} type={key ? "layer" : "empty"} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Print-only container: every layer rendered at once, grayscale via @media print CSS.
+        // Layers are grouped two-per-page so each printed sheet holds exactly two layers.
+        function PrintView() {
+            const layerKeys = Object.keys(LAYERS);
+            const pages = [];
+            for (let i = 0; i < layerKeys.length; i += 2) {
+                pages.push(layerKeys.slice(i, i + 2));
+            }
 
             return (
-                <div className="min-h-screen p-8 flex flex-col items-center">
+                <div className="print-only p-6">
+                    <div className="print-title">Corne ZMK Configuration — All Layers</div>
+
+                    {pages.map((pageLayers, p) => (
+                        <div key={p} className="print-page">
+                            {pageLayers.map(layerKey => (
+                                <div key={layerKey} className="print-layer">
+                                    <div className="print-layer-name">{LAYERS[layerKey].name}</div>
+                                    <div className="print-layer-desc">{LAYERS[layerKey].description}</div>
+                                    <Board layerKey={layerKey} />
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+
+                    {/* Reference sheet: combos + design philosophy */}
+                    <div className="print-page print-reference">
+                        <div className="print-combos">
+                            <h2>Power Combos</h2>
+                            {COMBOS.map((combo, i) => (
+                                <div key={i} className="print-combo-row">
+                                    {combo.keys} → {combo.result} &nbsp;({combo.desc})
+                                </div>
+                            ))}
+                        </div>
+                        <div className="print-philosophy">
+                            <h2>Design Philosophy</h2>
+                            <ul>
+                                <li><b>Home Row Mods:</b> Hold A/S/D/F or J/K/L/; for modifiers to minimize hand movement.</li>
+                                <li><b>Tri-Layer Nav:</b> Hold NUM + SYM simultaneously to activate the Navigation layer.</li>
+                                <li><b>Contextual Thumbs:</b> Left thumb handles Esc/Mouse, right thumb handles space/tab.</li>
+                                <li><b>Magnet Integration:</b> Direct window snapping via the Nav layer (Snap L/C/M/R).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            const [activeLayer, setActiveLayer] = useState("BASE");
+
+            return (
+                <React.Fragment>
+                {/* Interactive view — hidden when printing (see @media print) */}
+                <div className="screen-only min-h-screen p-8 flex flex-col items-center">
                     <header className="text-center mb-10">
                         <h1 className="text-4xl font-bold text-sky-400 mb-2">Corne ZMK Configuration</h1>
                         <p className="text-slate-400 font-mono text-sm">v3.0 - {new Date().toLocaleDateString()}</p>
                     </header>
 
-                    <div className="flex flex-wrap justify-center gap-2 mb-10 bg-slate-900 p-2 rounded-xl border border-slate-800">
+                    <div className="flex flex-wrap justify-center items-center gap-2 mb-10 bg-slate-900 p-2 rounded-xl border border-slate-800">
                         {Object.keys(LAYERS).map(layer => (
                             <button
                                 key={layer}
@@ -176,31 +379,18 @@
                                 {LAYERS[layer].name}
                             </button>
                         ))}
+                        <button
+                            onClick={() => window.print()}
+                            title="Print an ink-efficient black & white sheet with all layers"
+                            className="px-5 py-2 rounded-lg font-semibold transition-all bg-emerald-600 text-white hover:bg-emerald-500 ml-2"
+                        >
+                            🖨️ Print (B&W)
+                        </button>
                     </div>
 
                     <div className="bg-slate-900/50 p-10 rounded-3xl border border-slate-800 shadow-2xl mb-10 backdrop-blur-sm">
-                        <div className="flex flex-col md:flex-row justify-between items-start gap-12">
-                            {/* Left Half */}
-                            <div className="flex flex-col items-end">
-                                {renderSide(LAYERS[activeLayer].left)}
-                                <div className="flex mt-3 mr-1">
-                                    {LAYERS[activeLayer].thumbs.slice(0, 3).map((key, i) => (
-                                        <Key key={i} label={key} type={key ? "layer" : "empty"} />
-                                    ))}
-                                </div>
-                            </div>
+                        <Board layerKey={activeLayer} />
 
-                            {/* Right Half */}
-                            <div className="flex flex-col items-start">
-                                {renderSide(LAYERS[activeLayer].right)}
-                                <div className="flex mt-3 ml-1">
-                                    {LAYERS[activeLayer].thumbs.slice(3, 6).map((key, i) => (
-                                        <Key key={i} label={key} type={key ? "layer" : "empty"} />
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                        
                         <div className="mt-8 text-center text-slate-400 text-sm max-w-2xl mx-auto">
                             <span className="text-sky-400 font-bold uppercase mr-2">{LAYERS[activeLayer].name}:</span>
                             {LAYERS[activeLayer].description}
@@ -236,6 +426,10 @@
                         </div>
                     </div>
                 </div>
+
+                {/* Print view — hidden on screen, shown only when printing */}
+                <PrintView />
+                </React.Fragment>
             );
         }
 
