@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corne ZMK Layout Visualizer</title>
+    <title>TOTEM ZMK Layout Visualizer</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -146,14 +146,14 @@
                 name: "Base",
                 description: "Alpha layer with Home Row Mods (Shift, Ctrl, Cmd, Alt)",
                 left: [
-                    ["DEL", "Q", "W", "E", "R", "T"],
-                    ["⌃", "A (⇧)", "S (⌃)", "D (⌘)", "F (⌥)", "G"],
-                    ["⇧", "Z", "X", "C", "V", "B"]
+                    ["Q", "W", "E", "R", "T"],
+                    ["A (⇧)", "S (⌃)", "D (⌘)", "F (⌥)", "G"],
+                    ["DEL", "Z", "X", "C", "V", "B"]
                 ],
                 right: [
-                    ["Y", "U", "I", "O", "P", "⌫"],
-                    ["H", "J (⌥)", "K (⌘)", "L (⌃)", "; (⇧)", "'"],
-                    ["N", "M", ",", ".", "/", "⇧"]
+                    ["Y", "U", "I", "O", "P"],
+                    ["H", "J (⌥)", "K (⌘)", "L (⌃)", "; (⇧)"],
+                    ["N", "M", ",", ".", "/", "⌫"]
                 ],
                 thumbs: ["ESC (MSE)", "NUM", "ENT", "SPC", "SYM", "TAB"]
             },
@@ -161,13 +161,13 @@
                 name: "Colemak",
                 description: "Colemak-DH alphas with home-row mods (hold for Shift/Ctrl/Cmd/Alt)",
                 left: [
-                    ["", "Q", "W", "F", "P", "B"],
-                    ["", "A (⇧)", "R (⌃)", "S (⌘)", "T (⌥)", "G"],
+                    ["Q", "W", "F", "P", "B"],
+                    ["A (⇧)", "R (⌃)", "S (⌘)", "T (⌥)", "G"],
                     ["", "Z", "X", "C", "D", "V"]
                 ],
                 right: [
-                    ["J", "L", "U", "Y", "'", ""],
-                    ["M", "N (⌥)", "E (⌘)", "I (⌃)", "O (⇧)", ""],
+                    ["J", "L", "U", "Y", "'"],
+                    ["M", "N (⌥)", "E (⌘)", "I (⌃)", "O (⇧)"],
                     ["K", "H", ",", ".", "/", ""]
                 ],
                 thumbs: ["", "NUM", "", "", "SYM", ""]
@@ -176,13 +176,13 @@
                 name: "Numbers/BT",
                 description: "Numbers, Bluetooth profile selection, and Brightness/Volume",
                 left: [
-                    ["`", "1", "2", "3", "4", "5"],
-                    ["", "BT 0", "BT 1", "BT 2", "BT 3", "BT 4"],
-                    ["⇧", "BRI-", "BRI+", "VOL-", "VOL+", "MUTE"]
+                    ["1", "2", "3", "4", "5"],
+                    ["BT 0", "BT 1", "BT 2", "BT 3", "BT 4"],
+                    ["`", "BRI-", "BRI+", "VOL-", "VOL+", "MUTE"]
                 ],
                 right: [
-                    ["6", "7", "8", "9", "0", "⌫"],
-                    ["←", "↓", "↑", "→", "", ""],
+                    ["6", "7", "8", "9", "0"],
+                    ["←", "↓", "↑", "→", ""],
                     ["", "", "", "", "TOG COL", ""]
                 ],
                 thumbs: ["", "", "", "⌃", "", ""]
@@ -191,13 +191,13 @@
                 name: "Symbols",
                 description: "Coding symbols optimized for JavaScript/TypeScript development",
                 left: [
-                    ["TAB", "!", "@", "#", "$", "%"],
-                    ["⌃", "^", "&", "*", "_", "+"],
+                    ["!", "@", "#", "$", "%"],
+                    ["^", "&", "*", "_", "+"],
                     ["⇧", "~", "|", "\\", "-", "="]
                 ],
                 right: [
-                    ["{", "}", "(", ")", "`", "⌫"],
-                    ["[", "]", ":", "\"", ";", "'"],
+                    ["{", "}", "(", ")", "`"],
+                    ["[", "]", ":", "\"", ";"],
                     ["<", ">", "?", "'", ".", "ESC"]
                 ],
                 thumbs: ["", "NUM", "", "", "", ""]
@@ -206,13 +206,13 @@
                 name: "Mouse",
                 description: "Mouse movement, clicks, and scroll wheel emulation",
                 left: [
-                    ["", "", "F2", "", "", ""],
-                    ["", "MCLK", "", "", "LCLK", "RCLK"],
+                    ["BT CLR", "", "F2", "", ""],
+                    ["", "MCLK", "", "LCLK", "RCLK"],
                     ["", "", "", "SCRL↑", "SCRL↓", ""]
                 ],
                 right: [
-                    ["", "", "", "", "", "OUT"],
-                    ["M-←", "M-↓", "M-↑", "M-→", "", ""],
+                    ["", "", "", "", "OUT"],
+                    ["M-←", "M-↓", "M-↑", "M-→", ""],
                     ["", "", "", "", "", ""]
                 ],
                 thumbs: ["", "", "", "", "", ""]
@@ -221,14 +221,14 @@
                 name: "Navigation",
                 description: "F-keys, Window management (Magnet), and VS Code shortcuts",
                 left: [
-                    ["F1", "F2", "F3", "F4", "F5", "F6"],
-                    ["", "", "Raycast", "Cmd+K", "", ""],
-                    ["Snap L", "Snap C", "Snap M", "Snap R", "", ""]
+                    ["F1", "F2", "F3", "F4", "F5"],
+                    ["", "Raycast", "Cmd+K", "", ""],
+                    ["F11", "Snap L", "Snap C", "Snap M", "Snap R", ""]
                 ],
                 right: [
-                    ["F7", "F8", "F9", "F10", "F11", "F12"],
-                    ["←", "↓", "↑", "→", "", ""],
-                    ["HOME", "Tab-", "Tab+", "END", "Term", "File"]
+                    ["F6", "F7", "F8", "F9", "F10"],
+                    ["←", "↓", "↑", "→", "File"],
+                    ["HOME", "Tab-", "Tab+", "END", "Term", "F12"]
                 ],
                 thumbs: ["", "", "", "", "", ""]
             }
@@ -261,11 +261,11 @@
 
         // Renders one half (left/right) of the keyboard for a layer. Module-scope so
         // both the interactive view and the print view can reuse it.
-        function renderSide(sideData) {
+        function renderSide(sideData, isLeft) {
             return (
                 <div className="grid grid-rows-3 gap-0.5">
                     {sideData.map((row, i) => (
-                        <div key={i} className="flex">
+                        <div key={i} className={`flex ${isLeft ? "justify-end" : ""}`}>
                             {row.map((key, j) => {
                                 let type = "normal";
                                 if (!key) type = "empty";
@@ -287,7 +287,7 @@
                 <div className="print-board flex flex-col md:flex-row justify-between items-start gap-12">
                     {/* Left Half */}
                     <div className="flex flex-col items-end">
-                        {renderSide(data.left)}
+                        {renderSide(data.left, true)}
                         <div className="flex mt-3 mr-1">
                             {data.thumbs.slice(0, 3).map((key, i) => (
                                 <Key key={i} label={key} type={key ? "layer" : "empty"} />
@@ -297,7 +297,7 @@
 
                     {/* Right Half */}
                     <div className="flex flex-col items-start">
-                        {renderSide(data.right)}
+                        {renderSide(data.right, false)}
                         <div className="flex mt-3 ml-1">
                             {data.thumbs.slice(3, 6).map((key, i) => (
                                 <Key key={i} label={key} type={key ? "layer" : "empty"} />
@@ -319,7 +319,7 @@
 
             return (
                 <div className="print-only p-6">
-                    <div className="print-title">Corne ZMK Configuration — All Layers</div>
+                    <div className="print-title">TOTEM ZMK Configuration — All Layers</div>
 
                     {pages.map((pageLayers, p) => (
                         <div key={p} className="print-page">
@@ -365,8 +365,8 @@
                 {/* Interactive view — hidden when printing (see @media print) */}
                 <div className="screen-only min-h-screen p-8 flex flex-col items-center">
                     <header className="text-center mb-10">
-                        <h1 className="text-4xl font-bold text-sky-400 mb-2">Corne ZMK Configuration</h1>
-                        <p className="text-slate-400 font-mono text-sm">v3.0 - {new Date().toLocaleDateString()}</p>
+                        <h1 className="text-4xl font-bold text-sky-400 mb-2">TOTEM ZMK Configuration</h1>
+                        <p className="text-slate-400 font-mono text-sm">v4.0 - TOTEM</p>
                     </header>
 
                     <div className="flex flex-wrap justify-center items-center gap-2 mb-10 bg-slate-900 p-2 rounded-xl border border-slate-800">
