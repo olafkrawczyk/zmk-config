@@ -109,6 +109,10 @@ Row1 mods mirror BASE (A=SFT R=CTL S=GUI T=ALT │ N=ALT E=GUI I=CTL O=SFT).
 | sys_reset   | 9 20 31   | P+DEL+BSPC| sys_reset     |
 | bootloader  | 10 20 31  | A+DEL+BSPC| bootloader    |
 
+Note: `bootloader` is the one chord that is NOT the same fingers as the Corne —
+the original was DEL+**LCTRL**+BSPC, and LCTRL's outer-column key does not exist
+on TOTEM, so A substitutes for it.
+
 timeout-ms = 50 for all (as Corne).
 
 ## Behaviors
