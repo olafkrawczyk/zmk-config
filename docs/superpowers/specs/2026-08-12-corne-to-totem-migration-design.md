@@ -101,6 +101,7 @@ Row1 mods mirror BASE (A=SFT R=CTL S=GUI T=ALT │ N=ALT E=GUI I=CTL O=SFT).
 | Name        | Positions  | Keys      | Output        |
 |-------------|-----------|-----------|---------------|
 | esc         | 16 17     | J+K       | ESC           |
+| bspc        | 15 16     | H+J       | BSPC (added post-migration; key 31 kept as fallback) |
 | semi        | 17 18     | K+L       | SEMI          |
 | arrow       | 12 13     | D+F       | `=>` macro    |
 | interp      | 11 12     | S+D       | `${}` macro   |

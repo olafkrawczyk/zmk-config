@@ -36,6 +36,12 @@
             bindings = <&kp ESC>;
         };
 
+        combo_bspc {
+            timeout-ms = <50>;
+            key-positions = <15 16>;
+            bindings = <&kp BSPC>;
+        };
+
         combo_semi {
             timeout-ms = <50>;
             key-positions = <17 18>;
