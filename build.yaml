@@ -1,6 +1,9 @@
 include:
-  - board: seeeduino_xiao_ble
+  # ZMK main (Zephyr 4.1) renamed the board: seeeduino_xiao_ble -> xiao_ble//zmk
+  - board: xiao_ble//zmk
     shield: totem_left
-  - board: seeeduino_xiao_ble
+    artifact-name: totem_left-seeeduino_xiao_ble-zmk
+  - board: xiao_ble//zmk
     shield: totem_right
+    artifact-name: totem_right-seeeduino_xiao_ble-zmk
 # there is no settingsreset (needed) for the XIAO
