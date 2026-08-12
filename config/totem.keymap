@@ -195,7 +195,7 @@
 &kp Q  &kp W  &kp E  &kp R  &kp T     &kp Y  &kp U  &kp I  &kp O  &kp P
 &mode_tap_left LEFT_SHIFT A  &mode_tap_left LEFT_CONTROL S  &mode_tap_left LEFT_GUI D  &mode_tap_left RIGHT_ALT F  &kp G     &kp H  &mode_tap_right RIGHT_ALT J  &mode_tap_right RIGHT_GUI K  &mode_tap_right RIGHT_CONTROL L  &mode_tap_right RIGHT_SHIFT SEMICOLON
 &kp DEL  &kp Z  &kp X  &kp C  &kp V  &kp B     &kp N  &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp BSPC
-&kp N7  &kp N8  &kp N9     &kp SPACE  &mo SYM  &kp TAB
+&lt MSE ESCAPE  &mo NUM  &kp ENTER     &kp SPACE  &mo SYM  &kp TAB
             >;
         };
 
