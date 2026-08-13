@@ -178,6 +178,17 @@ contents, keep the all-layers print view.
 Corne-oriented). Local builds would need a fresh `west init`/`west update` per
 the new west.yml; out of scope for this migration.
 
+## Post-migration amendments (as built)
+
+- `build.yaml`/`totem.zmk.yml`: board renamed `seeeduino_xiao_ble` → `xiao_ble//zmk`
+  (ZMK main moved to Zephyr 4.1/HWMv2; upstream TOTEM repo is broken until it does the same).
+  Artifact names keep the old board string (spec-pinned).
+- Deep sleep **disabled** in `totem.conf` — wake-by-typing broken on XIAO BLE + ZMK main.
+- `CONFIG_ZMK_COMBO_MAX_*` lines removed — deprecated on ZMK main (auto-calculated).
+- H+J BSPC combo added (see combo table).
+- Visualizer renamed to `index.html` and served via GitHub Pages
+  (https://olafkrawczyk.github.io/zmk-config/).
+
 ## Verification
 
 - Push to GitHub → Actions build produces `totem_left-seeeduino_xiao_ble-zmk.uf2`
