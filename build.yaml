@@ -1,9 +1,16 @@
 include:
   # ZMK main (Zephyr 4.1) renamed the board: seeeduino_xiao_ble -> xiao_ble//zmk
+  # Halves are peripherals: the Prospector dongle is the split central.
+  # To use the keyboard without the dongle, remove the cmake-args and reflash.
   - board: xiao_ble//zmk
     shield: totem_left
     artifact-name: totem_left-seeeduino_xiao_ble-zmk
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
   - board: xiao_ble//zmk
     shield: totem_right
     artifact-name: totem_right-seeeduino_xiao_ble-zmk
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+  - board: xiao_ble//zmk
+    shield: totem_dongle prospector_adapter
+    artifact-name: totem_dongle-xiao_ble-zmk
 # there is no settingsreset (needed) for the XIAO
