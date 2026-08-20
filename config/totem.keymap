@@ -32,63 +32,63 @@
 
         combo_esc {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <16 17>;
             bindings = <&kp ESC>;
         };
 
         combo_bspc {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <15 16>;
             bindings = <&kp BSPC>;
         };
 
         combo_semi {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <17 18>;
             bindings = <&kp SEMI>;
         };
 
         combo_arrow {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <12 13>;
             bindings = <&m_arrow>;
         };
 
         combo_interp {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <11 12>;
             bindings = <&m_interp>;
         };
 
         combo_strict {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <13 14>;
             bindings = <&m_strict>;
         };
 
         combo_screenshot {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <7 8>;
             bindings = <&m_screenshot>;
         };
 
         combo_reset {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <9 20 31>;
             bindings = <&sys_reset>;
         };
 
         combo_bootloader {
             timeout-ms = <50>;
-            require-prior-idle-ms = <100>;
+            require-prior-idle-ms = <50>;
             key-positions = <10 20 31>;
             bindings = <&bootloader>;
         };
