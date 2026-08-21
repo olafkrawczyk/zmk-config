@@ -23,10 +23,14 @@
 };
 
 / {
-    /* Feeds CST816S touch events into LVGL as a pointer input device. */
+    /* Feeds CST816S touch events into LVGL as a pointer input device.
+     * invert-x/invert-y: the CST816S coordinate frame is rotated 180°
+     * relative to the ST7789 display in this mounting. */
     lvgl_pointer_input: lvgl_pointer_input {
         compatible = "zephyr,lvgl-pointer-input";
         input = <&cst816s>;
+        invert-x;
+        invert-y;
     };
 
     chosen {
