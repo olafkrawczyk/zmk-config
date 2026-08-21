@@ -6,6 +6,17 @@
 
 #include <dt-bindings/zmk/matrix_transform.h>
 
+/* Touchscreen (CST816S, on the Waveshare 1.69" Touch LCD) for swipe
+ * navigation between status screens. Requires the TP_* wires soldered:
+ * TP_SDA->D4, TP_SCL->D5, TP_RST->D0, TP_IRQ->D1. */
+&cst816s {
+    status = "okay";
+};
+
+&lvgl_pointer_input {
+    status = "okay";
+};
+
 / {
     chosen {
         zmk,kscan = &mock_kscan;

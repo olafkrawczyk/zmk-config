@@ -11,9 +11,9 @@ manifest:
       remote: zmkfirmware
       revision: main
       import: app/west.yml
-    # Fork of carrefinho/prospector-zmk-module (bongo cat screen added there)
+    # Fork of carrefinho/prospector-zmk-module (bongo cat screen, touch swipe navigation)
     - name: prospector-zmk-module
       remote: olafkrawczyk
-      revision: feat/new-status-screens
+      revision: feat/touch-swipe-screens
   self:
     path: config
