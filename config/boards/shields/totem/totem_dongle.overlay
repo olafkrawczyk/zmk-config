@@ -8,16 +8,27 @@
 
 /* Touchscreen (CST816S, on the Waveshare 1.69" Touch LCD) for swipe
  * navigation between status screens. Requires the TP_* wires soldered:
- * TP_SDA->D4, TP_SCL->D5, TP_RST->D0, TP_IRQ->D1. */
-&cst816s {
-    status = "okay";
-};
-
-&lvgl_pointer_input {
-    status = "okay";
+ * TP_SDA->D4, TP_SCL->D5, TP_RST->D0, TP_IRQ->D1.
+ * NOTE: the nodes are defined here (not in the module) because dtc resolves
+ * &label references in overlay concatenation order, and this overlay comes
+ * before the prospector_adapter overlays. */
+&i2c1 {
+    cst816s: cst816s@15 {
+        compatible = "hynitron,cst816s";
+        status = "okay";
+        reg = <0x15>;
+        irq-gpios = <&xiao_d 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        rst-gpios = <&xiao_d 0 GPIO_ACTIVE_LOW>;
+    };
 };
 
 / {
+    /* Feeds CST816S touch events into LVGL as a pointer input device. */
+    lvgl_pointer_input: lvgl_pointer_input {
+        compatible = "zephyr,lvgl-pointer-input";
+        input = <&cst816s>;
+    };
+
     chosen {
         zmk,kscan = &mock_kscan;
         zmk,matrix_transform = &default_transform;
