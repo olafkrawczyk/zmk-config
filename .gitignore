@@ -1,3 +1,10 @@
 
 .zmk/
 .DS_Store
+.west/
+build/
+zephyr/
+zmk/
+modules/
+optional/
+prospector-zmk-module/

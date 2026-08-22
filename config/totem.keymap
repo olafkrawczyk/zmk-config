@@ -188,6 +188,20 @@
             hold-trigger-on-release;
             hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 25 32 33 34>;
         };
+
+        pomodoro_toggle: pomodoro_toggle {
+            compatible = "zmk,behavior-pomodoro";
+            label = "POMODORO_TOGGLE";
+            #binding-cells = <0>;
+            action = <0>;
+        };
+
+        pomodoro_next: pomodoro_next {
+            compatible = "zmk,behavior-pomodoro";
+            label = "POMODORO_NEXT";
+            #binding-cells = <0>;
+            action = <1>;
+        };
     };
 
     keymap {
@@ -260,7 +274,7 @@
             bindings = <
 &kp F1  &kp F2  &kp F3  &kp F4  &kp F5     &kp F6  &kp F7  &kp F8  &kp F9  &kp F10
 &trans  &kp LA(SPACE)  &kp LG(K)  &kp LG(LBKT)  &kp LG(RBKT)     &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &kp LG(P)
-&kp F11  &m_snap_l  &m_snap_c  &m_snap_m  &m_snap_r  &trans     &kp HOME  &kp LG(LS(LBKT))  &kp LG(LS(RBKT))  &kp END  &kp LC(GRAVE)  &kp F12
+&kp F11  &m_snap_l  &pomodoro_toggle  &pomodoro_next  &m_snap_r  &trans     &kp HOME  &kp LG(LS(LBKT))  &kp LG(LS(RBKT))  &kp END  &kp LC(GRAVE)  &kp F12
 &trans  &trans  &trans     &trans  &trans  &trans
             >;
         };
