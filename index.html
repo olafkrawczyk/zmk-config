@@ -219,11 +219,11 @@
             },
             NAV: {
                 name: "Navigation",
-                description: "F-keys, Window management (Magnet), and VS Code shortcuts",
+                description: "F-keys, Window management (Magnet), VS Code shortcuts, and Pomodoro timer control (⏯ start/stop, ⟳ cycle 25/5 ↔ 50/10)",
                 left: [
                     ["F1", "F2", "F3", "F4", "F5"],
                     ["", "Raycast", "Cmd+K", "Back", "Fwd"],
-                    ["F11", "Snap L", "Snap C", "Snap M", "Snap R", ""]
+                    ["F11", "Snap L", "POMO ⏯", "POMO ⟳", "Snap R", ""]
                 ],
                 right: [
                     ["F6", "F7", "F8", "F9", "F10"],
@@ -272,7 +272,7 @@
                                 if (!key) type = "empty";
                                 else if (key.includes("(") || ["⌃", "⇧", "DEL", "⌫", "ESC"].includes(key)) type = "mod";
                                 else if (["NUM", "SYM", "NAV", "MSE", "COL"].some(l => key.includes(l))) type = "layer";
-                                else if (["Raycast", "Term", "File", "Snap", "OUT"].some(s => key.includes(s))) type = "special";
+                                else if (["Raycast", "Term", "File", "Snap", "OUT", "POMO"].some(s => key.includes(s))) type = "special";
                                 return <Key key={j} label={key} type={type} />;
                             })}
                         </div>
